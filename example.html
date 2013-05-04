@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <title>jump</title>
+    <script type="text/javascript" src="../jump.js"></script>
+    <style type="text/css">
+      body {
+        background: #fff;
+      }
+
+      #center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin: -22px 0 0 -22px;
+      }
+
+      div {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        border-radius: 22px;
+        background: #f4f4f4;
+      }
+
+      #focus {
+        background: #3498db;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="center">
+      <div style="top: 0; left: 0" id="focus"></div>
+    </section>
+  </body>
+  <script>
+    var center = document.getElementById('center')
+      , divs = document.getElementsByTagName('div')
+
+    circles(4, 100, 0.002)
+    circles(12, 200, -0.002)
+
+    function circles(num, radius, speed) {
+      var rotation = 0
+        , elements = []
+
+      for (var i = 0; i < num; i++) {
+        var element = document.createElement('div')
+        center.insertBefore(element, null)
+        elements.push(element)
+      }
+
+      function spin() {
+        for (var i = 0; i < num; i++) {
+          var angle = rotation + (i * Math.PI*2/num)
+            , element = elements[i]
+
+          element.style.left = Math.round((Math.sin(angle) * radius)) + 'px'
+          element.style.top = Math.round((Math.cos(angle) * radius)) + 'px'
+        }
+
+        rotation += speed
+        setTimeout(spin, 1)
+      }
+
+      spin()
+    }
+
+    document.onkeydown = function (ev) {
+      var current = document.getElementById('focus')
+        , next
+
+      switch (ev.keyCode) {
+      case 37: next = jump(current, divs, Math.PI*1.0); break
+      case 38: next = jump(current, divs, Math.PI*0.5); break
+      case 39: next = jump(current, divs, Math.PI*0.0); break
+      case 40: next = jump(current, divs, Math.PI*1.5); break
+      }
+
+      if (next) {
+        current.id = ''
+        next.id = 'focus'
+
+        return false
+      }
+    }
+  </script>
+</html>
